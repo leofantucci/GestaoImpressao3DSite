@@ -8,27 +8,34 @@ namespace Repositorio
 {
     public class RepositorioTechToys
     {
+        private readonly IDbContextFactory<MyDBContext> _contextFactory;
+
+        public RepositorioTechToys(IDbContextFactory<MyDBContext> contextFactory)
+        {
+            _contextFactory = contextFactory;
+        }
+
         // Garante que o banco e as tabelas existam
         public void CriarBanco()
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             db.Database.EnsureCreated();
         }
 
         // Limpa todas as tabelas resetando IDs
         public void LimparBanco()
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             db.Database.ExecuteSqlRaw(@"
                 TRUNCATE TABLE 
                     ""Venda"", ""Produto"", ""Embalagem"", ""MateriaPrima"", ""Cliente"", ""Impressora"", ""Fornecedor"" 
                 RESTART IDENTITY CASCADE;");
         }
-        
+
         // Limpa a tabela desejada resetando IDs
         public void LimparBanco(string tabela)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             db.Database.ExecuteSqlRaw(@$"
                 TRUNCATE TABLE 
                     ""{tabela}"" 
@@ -40,7 +47,7 @@ namespace Repositorio
         // READ: Obter registro por ID
         public T ObterPorId<T>(int id) where T : class
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
 
             if (typeof(T) == typeof(MateriaPrima))
             {
@@ -86,7 +93,7 @@ namespace Repositorio
         // READ: Listar todos com AsNoTracking() para evitar dados defasados em cache
         public List<T> ListarTodos<T>() where T : class
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
 
             if (typeof(T) == typeof(MateriaPrima))
             {
@@ -129,7 +136,7 @@ namespace Repositorio
         // UPDATE: Atualiza qualquer entidade alterada
         public void Atualizar<T>(T entidade) where T : class
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             db.Set<T>().Update(entidade);
             db.SaveChanges();
         }
@@ -137,7 +144,7 @@ namespace Repositorio
         // DELETE: Deleta pelo ID em qualquer tabela
         public bool DeletarPorId<T>(int id) where T : class
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             var item = db.Set<T>().Find(id);
             if (item == null) return false;
 
@@ -152,7 +159,7 @@ namespace Repositorio
 
         public Cliente CadastrarCliente(string nome, string telefone, string email, string instagram)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             var cli = new Cliente
             {
                 Nome = nome,
@@ -167,7 +174,7 @@ namespace Repositorio
 
         public Fornecedor CadastrarFornecedor(string nome, string email, string telefone, string site)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             var forn = new Fornecedor
             {
                 Nome = nome,
@@ -182,7 +189,7 @@ namespace Repositorio
 
         public Impressora CadastrarImpressora(string nome, string modelo, double kwh)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             var imp = new Impressora
             {
                 Nome = nome,
@@ -196,7 +203,7 @@ namespace Repositorio
 
         public MateriaPrima CadastrarMateriaPrima(string nome, int pesoCompra, double precoCompra, Fornecedor fornecedor, int estoque)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             if (fornecedor != null && fornecedor.Id > 0)
                 db.Attach(fornecedor);
 
@@ -214,7 +221,7 @@ namespace Repositorio
 
         public Embalagem CadastrarEmbalagem(string nome, string tipo, double largura, double comprimento, double altura, double preco, Fornecedor fornecedor = null, int estoque = 0)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             if (fornecedor != null && fornecedor.Id > 0)
                 db.Attach(fornecedor);
 
@@ -236,7 +243,7 @@ namespace Repositorio
 
         public Produto CadastrarProduto(string nome, MateriaPrima mat, Impressora imp, double valorVenda, double pesoImp, double tempoImp, double largura, double comp, double altura, int estoque)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             if (mat != null && mat.Id > 0) db.Attach(mat);
             if (imp != null && imp.Id > 0) db.Attach(imp);
 
@@ -252,7 +259,7 @@ namespace Repositorio
                 comprimento = comp,
                 altura = altura,
                 Estoque = estoque,
-                Ativo = true // Garante que o produto já nasça visível
+                Ativo = true
             };
             db.Produto.Add(prod);
             db.SaveChanges();
@@ -261,7 +268,7 @@ namespace Repositorio
 
         public Venda CadastrarVenda(Cliente cliente, Produto produto, int quantidade, Embalagem embalagem, int quantidadeEmbalagem, DateTime dataHora)
         {
-            using var db = new MyDBContext();
+            using var db = _contextFactory.CreateDbContext();
             if (cliente != null && cliente.Id > 0) db.Attach(cliente);
             if (produto != null && produto.Id > 0) db.Attach(produto);
             if (embalagem != null && embalagem.Id > 0) db.Attach(embalagem);

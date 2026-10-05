@@ -94,4 +94,5 @@
 /home/leof/RiderProjects/BlazorApp2/BlazorApp2/bin/Debug/net10.0/TechToysDominio.pdb
 /home/leof/RiderProjects/BlazorApp2/BlazorApp2/obj/Debug/net10.0/BlazorApp2.csproj.AssemblyReference.cache
 /home/leof/RiderProjects/BlazorApp2/BlazorApp2/obj/Debug/net10.0/BlazorApp2.csproj.Up2Date
-/home/leof/RiderProjects/BlazorApp2/BlazorApp2/obj/Debug/net10.0/compressed/fcccs64pwj-{0}-bymfy9y1a5-bymfy9y1a5.gz
+/home/leof/RiderProjects/BlazorApp2/BlazorApp2/obj/Debug/net10.0/BlazorApp2.sourcelink.json
+/home/leof/RiderProjects/BlazorApp2/BlazorApp2/obj/Debug/net10.0/compressed/fcccs64pwj-{0}-tiy8dfrq9v-tiy8dfrq9v.gz

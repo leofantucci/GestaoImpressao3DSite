@@ -274,6 +274,10 @@ h1:focus {
     text-align: start;
 }
 
+.atalho_visualizar{
+    color: deeppink;
+}
+
 body{
     background: #401F3E;
     color: white;

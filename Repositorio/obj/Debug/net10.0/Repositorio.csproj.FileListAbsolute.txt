@@ -13,3 +13,4 @@
 /home/leof/RiderProjects/BlazorApp2/Repositorio/obj/Debug/net10.0/refint/Repositorio.dll
 /home/leof/RiderProjects/BlazorApp2/Repositorio/obj/Debug/net10.0/Repositorio.pdb
 /home/leof/RiderProjects/BlazorApp2/Repositorio/obj/Debug/net10.0/ref/Repositorio.dll
+/home/leof/RiderProjects/BlazorApp2/Repositorio/obj/Debug/net10.0/Repositorio.sourcelink.json

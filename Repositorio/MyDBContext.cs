@@ -5,34 +5,22 @@ namespace Repositorio
 {
     public class MyDBContext : DbContext
     {
-        public DbSet<Impressora> Impressora { get; set; }
-        public DbSet<Fornecedor> Fornecedor { get; set; }
-        public DbSet<MateriaPrima> MateriaPrima { get; set; }
-        public DbSet<Cliente> Cliente { get; set; }
-        public DbSet<Produto> Produto { get; set; }
-        public DbSet<Embalagem> Embalagem { get; set; }
-        public DbSet<Venda> Venda { get; set; }
-
-        static MyDBContext()
+        public MyDBContext(DbContextOptions<MyDBContext> options) : base(options)
         {
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Fornecedor> Fornecedor { get; set; }
+        public DbSet<Impressora> Impressora { get; set; }
+        public DbSet<MateriaPrima> MateriaPrima { get; set; }
+        public DbSet<Embalagem> Embalagem { get; set; }
+        public DbSet<Produto> Produto { get; set; }
+        public DbSet<Venda> Venda { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                var server = "localhost";
-                var port = "5432";
-                var username = "postgres";
-                var password = "admin";
-                var database = "TechToys";
-
-                var conStr =
-                    $"Host={server};Port={port};Database={database};Username={username};Password={password}";
-
-                optionsBuilder.UseNpgsql(conStr);
-            }
+            base.OnModelCreating(modelBuilder);
+            // Configurações adicionais de mapeamento se houver
         }
     }
 }
